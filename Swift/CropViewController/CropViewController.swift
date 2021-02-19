@@ -152,6 +152,13 @@ open class CropViewController: UIViewController, TOCropViewControllerDelegate {
     }
     
     /**
+     The cropping style of this particular crop view controller
+     */
+    public var color: String {
+        return toCropViewController.color
+    }
+    
+    /**
       A choice from one of the pre-defined aspect ratio presets
     */
     public var aspectRatioPreset: CropViewControllerAspectRatioPreset {
@@ -446,8 +453,8 @@ open class CropViewController: UIViewController, TOCropViewControllerDelegate {
      
      @param image The image that will be used to crop.
      */
-    public init(image: UIImage) {
-        self.toCropViewController = TOCropViewController(image: image)
+    public init(image: UIImage, color: String) {
+        self.toCropViewController = TOCropViewController(image: image, color: color)
         super.init(nibName: nil, bundle: nil)
         setUpCropController()
     }
@@ -458,8 +465,8 @@ open class CropViewController: UIViewController, TOCropViewControllerDelegate {
      @param style The cropping style that will be used with this view controller (eg, rectangular, or circular)
      @param image The image that will be cropped
      */
-    public init(croppingStyle: CropViewCroppingStyle, image: UIImage) {
-        self.toCropViewController = TOCropViewController(croppingStyle: croppingStyle, image: image)
+    public init(croppingStyle: CropViewCroppingStyle, image: UIImage, color: String) {
+        self.toCropViewController = TOCropViewController(croppingStyle: croppingStyle, image: image, color: color)
         super.init(nibName: nil, bundle: nil)
         setUpCropController()
     }

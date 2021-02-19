@@ -26,7 +26,8 @@
 #import "TOCropOverlayView.h"
 #import "TOCropScrollView.h"
 
-#define TOCROPVIEW_BACKGROUND_COLOR [UIColor colorWithWhite:0.12f alpha:1.0f]
+#define TOCROPVIEW_BACKGROUND_COLOR_DARK [UIColor colorWithWhite:0.12f alpha:1.0f]
+#define TOCROPVIEW_BACKGROUND_COLOR_CLEAR [UIColor colorWithWhite:1.0f alpha:1.0f]
 
 static const CGFloat kTOCropViewPadding = 14.0f;
 static const NSTimeInterval kTOCropTimerDuration = 0.8f;
@@ -52,6 +53,7 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 @property (nonatomic, strong, readwrite) UIImage *image;
 @property (nonatomic, assign, readwrite) TOCropViewCroppingStyle croppingStyle;
+@property (nonatomic, strong, readwrite) NSString* color;
 
 /* Views */
 @property (nonatomic, strong) UIImageView *backgroundImageView;     /* The main image view, placed within the scroll view */
@@ -116,16 +118,17 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
 
 @implementation TOCropView
 
-- (instancetype)initWithImage:(UIImage *)image
+- (instancetype)initWithImage:(UIImage *)image color:(NSString *)color
 {
-    return [self initWithCroppingStyle:TOCropViewCroppingStyleDefault image:image];
+    return [self initWithCroppingStyle:TOCropViewCroppingStyleDefault image:image color:color];
 }
 
-- (instancetype)initWithCroppingStyle:(TOCropViewCroppingStyle)style image:(UIImage *)image
+- (instancetype)initWithCroppingStyle:(TOCropViewCroppingStyle)style image:(UIImage *)image color:(NSString *)color
 {
     if (self = [super init]) {
         _image = image;
         _croppingStyle = style;
+        _color = color;
         [self setup];
     }
     
@@ -140,7 +143,13 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     
     //View properties
     self.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-    self.backgroundColor = TOCROPVIEW_BACKGROUND_COLOR;
+    
+    if ([self.color  isEqual: @"DARK"]) {
+        self.backgroundColor = TOCROPVIEW_BACKGROUND_COLOR_DARK;
+    }else{
+        self.backgroundColor = TOCROPVIEW_BACKGROUND_COLOR_CLEAR;
+    }
+    
     self.cropBoxFrame = CGRectZero;
     self.applyInitialCroppedImageFrame = NO;
     self.editing = NO;
@@ -187,7 +196,13 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     //Grey transparent overlay view
     self.overlayView = [[UIView alloc] initWithFrame:self.bounds];
     self.overlayView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
-    self.overlayView.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.35f];
+    
+    if ([self.color  isEqual: @"DARK"]) {
+        self.overlayView.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.35f];
+    }else{
+        self.overlayView.backgroundColor = [self.backgroundColor colorWithAlphaComponent:0.95f];
+    }
+    
     self.overlayView.hidden = NO;
     self.overlayView.userInteractionEnabled = NO;
     [self addSubview:self.overlayView];
@@ -239,6 +254,11 @@ typedef NS_ENUM(NSInteger, TOCropViewOverlayEdge) {
     self.gridOverlayView = [[TOCropOverlayView alloc] initWithFrame:self.foregroundContainerView.frame];
     self.gridOverlayView.userInteractionEnabled = NO;
     self.gridOverlayView.gridHidden = YES;
+    
+    if([self.color  isEqual: @"DARK"]) {
+        self.gridOverlayView.isDark = YES;
+    }
+    
     [self addSubview:self.gridOverlayView];
     
     // The pan controller to recognize gestures meant to resize the grid view

@@ -29,6 +29,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** Hides the interior grid lines, sans animation. */
 @property (nonatomic, assign) BOOL gridHidden;
 
+/** Checks the color for the lines */
+@property (nonatomic, assign) BOOL isDark;
+
 /** Add/Remove the interior horizontal grid lines. */
 @property (nonatomic, assign) BOOL displayHorizontalGridLines;
 

@@ -44,6 +44,7 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
 {
     if (self = [super initWithFrame:frame]) {
         self.clipsToBounds = NO;
+        _isDark = NO;
         [self setup];
     }
     
@@ -223,7 +224,13 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
 
 - (nonnull UIView *)createNewLineView {
     UIView *newLine = [[UIView alloc] initWithFrame:CGRectZero];
-    newLine.backgroundColor = [UIColor whiteColor];
+    
+    if(self.isDark) {
+        newLine.backgroundColor = [UIColor whiteColor];
+    }else{
+        newLine.backgroundColor = [UIColor blackColor];
+    }
+    
     [self addSubview:newLine];
     return newLine;
 }

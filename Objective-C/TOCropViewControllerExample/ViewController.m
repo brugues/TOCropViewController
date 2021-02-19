@@ -17,6 +17,8 @@
 @property (nonatomic, assign) TOCropViewCroppingStyle croppingStyle; //The cropping style
 @property (nonatomic, assign) CGRect croppedFrame;
 @property (nonatomic, assign) NSInteger angle;
+@property (nonatomic, assign) NSString *color;
+
 
 @end
 
@@ -26,7 +28,8 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
-    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:image];
+    self.color = @"CLEAR";
+    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:image color:self.color];
     cropController.delegate = self;
 
     // Uncomment this if you wish to provide extra instructions via a title label
@@ -63,7 +66,7 @@
     //cropController.cropView.alwaysShowCroppingGrid = YES;
 
     // Uncomment this if you do not want translucency effect
-    //cropController.cropView.translucencyAlwaysHidden = YES;
+    cropController.cropView.translucencyAlwaysHidden = YES;
 
     self.image = image;
     
@@ -94,7 +97,7 @@
 - (void)didTapImageView
 {
     // When tapping the image view, restore the image to the previous cropping state
-    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:self.image];
+    TOCropViewController *cropController = [[TOCropViewController alloc] initWithCroppingStyle:self.croppingStyle image:self.image color:self.color];
     cropController.delegate = self;
     CGRect viewFrame = [self.view convertRect:self.imageView.frame toView:self.navigationController.view];
     [cropController presentAnimatedFromParentViewController:self
