@@ -240,8 +240,6 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
 - (nonnull UIView *)createNewLineView {
     UIView *newLine = [[UIView alloc] initWithFrame:CGRectZero];
     
-    NSLog(self.isDark ? @"DARK" : @"NOT DARK");
-
     if(self.isDark) {
         newLine.backgroundColor = [UIColor whiteColor];
     }else{
