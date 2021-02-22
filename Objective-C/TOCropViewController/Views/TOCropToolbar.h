@@ -27,6 +27,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface TOCropToolbar : UIView
 
+/**
+ Create a default instance of the crop view with the supplied image
+ */
+- (nonnull instancetype)initWithFrame:(CGRect)frame color:(nonnull NSString *)color;
+
 /* In horizontal mode, offsets all of the buttons vertically by height of status bar. */
 @property (nonatomic, assign) CGFloat statusBarHeightInset;
 
@@ -80,6 +85,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /* Done button frame for popover controllers */
 @property (nonatomic, readonly) CGRect doneButtonFrame;
+
+/* Checks the color for the lines */
+@property (nonatomic, assign) BOOL isDark;
 
 @end
 

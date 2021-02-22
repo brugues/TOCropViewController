@@ -26,7 +26,7 @@
 
 @interface TOCropToolbar()
 
-@property (nonatomic, strong) UIView *backgroundView;
+@property (nonatomic, strong, readwrite) UIView *backgroundView;
 
 @property (nonatomic, strong, readwrite) UIButton *doneTextButton;
 @property (nonatomic, strong, readwrite) UIButton *doneIconButton;
@@ -34,10 +34,10 @@
 @property (nonatomic, strong, readwrite) UIButton *cancelTextButton;
 @property (nonatomic, strong, readwrite) UIButton *cancelIconButton;
 
-@property (nonatomic, strong) UIButton *resetButton;
-@property (nonatomic, strong) UIButton *clampButton;
+@property (nonatomic, strong, readwrite) UIButton *resetButton;
+@property (nonatomic, strong, readwrite) UIButton *clampButton;
 
-@property (nonatomic, strong) UIButton *rotateButton; // defaults to counterclockwise button for legacy compatibility
+@property (nonatomic, strong, readwrite) UIButton *rotateButton; // defaults to counterclockwise button for legacy compatibility
 
 @property (nonatomic, assign) BOOL reverseContentLayout; // For languages like Arabic where they natively present content flipped from English
 
@@ -50,14 +50,37 @@
     if (self = [super initWithFrame:frame]) {
         [self setup];
     }
-    
+
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame color:(NSString *)color
+{
+    if (self = [super initWithFrame:frame]) {
+        if([color  isEqual: @"DARK"]){
+            _isDark = YES;
+        }else{
+            _isDark = NO;
+        }
+        
+        [self setup];
+    }
+
+    return self;
+}
+
+
 - (void)setup {
     self.backgroundView = [[UIView alloc] initWithFrame:self.bounds];
-    self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
-    [self addSubview:self.backgroundView];
+    
+    
+    if (self.isDark) {
+        self.backgroundView.backgroundColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
+        [self addSubview:self.backgroundView];
+    }else{
+        self.backgroundView.backgroundColor = [UIColor colorWithWhite:1.0f alpha:1.0f];
+        [self addSubview:self.backgroundView];
+    }
     
     // On iOS 9, we can use the new layout features to determine whether we're in an 'Arabic' style language mode
     if (@available(iOS 9.0, *)) {
@@ -77,7 +100,13 @@
 																  resourceBundle,
                                                                   nil)
                      forState:UIControlStateNormal];
-    [_doneTextButton setTitleColor:[UIColor colorWithRed:1.0f green:0.8f blue:0.0f alpha:1.0f] forState:UIControlStateNormal];
+    
+    if (self.isDark) {
+        [_doneTextButton setTitleColor:[UIColor yellowColor] forState:UIControlStateNormal];
+    }else{
+        [_doneTextButton setTitleColor:[UIColor blueColor] forState:UIControlStateNormal];
+    }
+    
     [_doneTextButton.titleLabel setFont:[UIFont systemFontOfSize:17.0f]];
     [_doneTextButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [_doneTextButton sizeToFit];
@@ -90,7 +119,7 @@
     [self addSubview:_doneIconButton];
     
     _cancelTextButton = [UIButton buttonWithType:UIButtonTypeSystem];
-    
+    [_cancelTextButton setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
     [_cancelTextButton setTitle: _cancelTextButtonTitle ?
         _cancelTextButtonTitle : NSLocalizedStringFromTableInBundle(@"Cancel",
 																	@"TOCropViewControllerLocalizable",
@@ -109,28 +138,44 @@
     
     _clampButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _clampButton.contentMode = UIViewContentModeCenter;
-    _clampButton.tintColor = [UIColor whiteColor];
+    if(self.isDark) {
+        _clampButton.tintColor = [UIColor whiteColor];
+    }else{
+        _clampButton.tintColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
+    }
     [_clampButton setImage:[TOCropToolbar clampImage] forState:UIControlStateNormal];
     [_clampButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_clampButton];
     
     _rotateCounterclockwiseButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _rotateCounterclockwiseButton.contentMode = UIViewContentModeCenter;
-    _rotateCounterclockwiseButton.tintColor = [UIColor whiteColor];
+    if(self.isDark) {
+        _rotateCounterclockwiseButton.tintColor = [UIColor whiteColor];
+    }else{
+        _rotateCounterclockwiseButton.tintColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
+    }
     [_rotateCounterclockwiseButton setImage:[TOCropToolbar rotateCCWImage] forState:UIControlStateNormal];
     [_rotateCounterclockwiseButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_rotateCounterclockwiseButton];
     
     _rotateClockwiseButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _rotateClockwiseButton.contentMode = UIViewContentModeCenter;
-    _rotateClockwiseButton.tintColor = [UIColor whiteColor];
+    if(self.isDark) {
+        _rotateClockwiseButton.tintColor = [UIColor whiteColor];
+    }else{
+        _rotateClockwiseButton.tintColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
+    }
     [_rotateClockwiseButton setImage:[TOCropToolbar rotateCWImage] forState:UIControlStateNormal];
     [_rotateClockwiseButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_rotateClockwiseButton];
     
     _resetButton = [UIButton buttonWithType:UIButtonTypeSystem];
     _resetButton.contentMode = UIViewContentModeCenter;
-    _resetButton.tintColor = [UIColor whiteColor];
+    if(self.isDark) {
+        _resetButton.tintColor = [UIColor whiteColor];
+    }else{
+        _resetButton.tintColor = [UIColor colorWithWhite:0.12f alpha:1.0f];
+    }
     _resetButton.enabled = NO;
     [_resetButton setImage:[TOCropToolbar resetImage] forState:UIControlStateNormal];
     [_resetButton addTarget:self action:@selector(buttonTapped:) forControlEvents:UIControlEventTouchUpInside];

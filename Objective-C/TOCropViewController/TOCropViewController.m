@@ -118,7 +118,7 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
     // Layout the views initially
     self.cropView.frame = [self frameForCropViewWithVerticalLayout:self.verticalLayout];
     self.toolbar.frame = [self frameForToolbarWithVerticalLayout:self.verticalLayout];
-
+        
     // Set up toolbar default behaviour
     self.toolbar.clampButtonHidden = self.aspectRatioPickerButtonHidden || circularMode;
     self.toolbar.rotateClockwiseButtonHidden = self.rotateClockwiseButtonHidden;
@@ -1068,7 +1068,7 @@ static const CGFloat kTOCropViewControllerToolbarHeight = 44.0f;
 - (TOCropToolbar *)toolbar
 {
     if (!_toolbar) {
-        _toolbar = [[TOCropToolbar alloc] initWithFrame:CGRectZero];
+        _toolbar = [[TOCropToolbar alloc] initWithFrame:CGRectZero color:self.color];
         [self.view addSubview:_toolbar];
     }
     return _toolbar;

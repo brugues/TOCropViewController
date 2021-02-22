@@ -51,6 +51,21 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
     return self;
 }
 
+- (instancetype)initWithFrame:(CGRect)frame color:(nonnull NSString *)color
+{
+    if (self = [super initWithFrame:frame]) {
+        self.clipsToBounds = NO;
+        if([color  isEqual: @"DARK"]){
+            _isDark = YES;
+        }else{
+            _isDark = NO;
+        }
+        [self setup];
+    }
+    
+    return self;
+}
+
 - (void)setup
 {
     UIView *(^newLineView)(void) = ^UIView *(void){
@@ -225,6 +240,8 @@ static const CGFloat kTOCropOverLayerCornerWidth = 20.0f;
 - (nonnull UIView *)createNewLineView {
     UIView *newLine = [[UIView alloc] initWithFrame:CGRectZero];
     
+    NSLog(self.isDark ? @"DARK" : @"NOT DARK");
+
     if(self.isDark) {
         newLine.backgroundColor = [UIColor whiteColor];
     }else{
